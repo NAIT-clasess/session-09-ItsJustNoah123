@@ -19,7 +19,9 @@ public class Game1 : Game
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
-
+        _graphics.PreferredBackBufferWidth = 520;
+        _graphics.PreferredBackBufferHeight = 200;
+        _graphics.ApplyChanges();
         base.Initialize();
     }
 
