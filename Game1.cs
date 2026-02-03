@@ -18,10 +18,11 @@ public class Game1 : Game
     // Textures
     private Texture2D _backgroundTexture, _ballTexture;
     // Ball movement
-    private float _ballSpeed = 10;
+    private float _ballSpeed = 200f;
     private Vector2 _ballPosition, _ballDirection;
 
     private Rectangle _playAreaBoundingBox;
+    private Rectangle ballRect;
 
     public Game1()
     {
@@ -39,7 +40,7 @@ public class Game1 : Game
         // Initial Ball Position and Direction
         _ballPosition.X = 150;
         _ballPosition.Y = 195;
-        _ballSpeed = 400;
+        _ballSpeed = 200f;
         _ballDirection.X = 1;
         _ballDirection.Y = -1;
 
@@ -66,12 +67,14 @@ public class Game1 : Game
         // TODO: Add your update logic here
              // Move Ball
             _ballPosition += _ballDirection * _ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        ballRect = new Rectangle((int)_ballPosition.X, (int)_ballPosition.Y, _ballWidthAndHeight, _ballWidthAndHeight);
+                
         // Bounce Ball off walls by inverting direction
-        if (_ballPosition.X <= _playAreaBoundingBox.Left || _ballPosition.X >= _playAreaBoundingBox.Right)
+        if (ballRect.Left <= _playAreaBoundingBox.Left || ballRect.Right >= _playAreaBoundingBox.Right)
         {
             _ballDirection.X *= -1;
         }   
-        if (_ballPosition.Y <= _playAreaBoundingBox.Top || _ballPosition.Y >= _playAreaBoundingBox.Bottom)
+        if (ballRect.Top <= _playAreaBoundingBox.Top || ballRect.Bottom >= _playAreaBoundingBox.Bottom)
         {
             _ballDirection.Y *= -1;
         }
@@ -86,7 +89,6 @@ public class Game1 : Game
         _spriteBatch.Begin();
         
         _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, _preferredScreenWidth, _preferredScreenHeight), Color.White);
-        var ballRect = new Rectangle((int)_ballPosition.X, (int)_ballPosition.Y, _ballWidthAndHeight, _ballWidthAndHeight);
         
         _spriteBatch.Draw(_ballTexture, ballRect, Color.White);
         _spriteBatch.End();
