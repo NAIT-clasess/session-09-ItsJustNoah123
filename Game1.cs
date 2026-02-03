@@ -8,6 +8,12 @@ public class Game1 : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
+    
+    private const int PerferredScreenWidth = 750;
+    private const int PerferredScreenHeight = 450;
+    
+    public const int _playeAreaEdgeLineWidth = 12; 
+
 
     public Game1()
     {
@@ -19,8 +25,9 @@ public class Game1 : Game
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
-        _graphics.PreferredBackBufferWidth = 520;
-        _graphics.PreferredBackBufferHeight = 200;
+    
+        _graphics.PreferredBackBufferWidth = PerferredScreenWidth;
+        _graphics.PreferredBackBufferHeight = PerferredScreenHeight;
         _graphics.ApplyChanges();
         base.Initialize();
     }
