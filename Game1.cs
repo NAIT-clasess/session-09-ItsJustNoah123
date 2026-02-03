@@ -8,11 +8,17 @@ public class Game1 : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
-    
+    // Screen
     private const int PerferredScreenWidth = 750;
     private const int PerferredScreenHeight = 450;
-    
-    public const int _playeAreaEdgeLineWidth = 12; 
+    // Play Area
+    private const int _playeAreaEdgeLineWidth = 12;
+    // Ball
+    private const int _ballWidthAndHeight = 21;
+    // Textures
+    private Texture2D _backgroundTexture, _ballTexture;
+
+
 
 
     public Game1()
@@ -35,6 +41,8 @@ public class Game1 : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
+        _backgroundTexture = Content.Load<Texture2D>("Court");
+        _ballTexture = Content.Load<Texture2D>("Ball");
 
         // TODO: use this.Content to load your game content here
     }
@@ -54,7 +62,9 @@ public class Game1 : Game
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
         // TODO: Add your drawing code here
-
+        _spriteBatch.Begin();
+        _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, PerferredScreenWidth, PerferredScreenHeight), Color.White);
+        _spriteBatch.End();
         base.Draw(gameTime);
     }
 }
