@@ -64,8 +64,9 @@ public class Game1 : Game
             Exit();
 
         // TODO: Add your update logic here
+             // Move Ball
             _ballPosition += _ballDirection * _ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        
+        // Bounce Ball off walls by inverting direction
         if (_ballPosition.X <= _playAreaBoundingBox.Left || _ballPosition.X >= _playAreaBoundingBox.Right)
         {
             _ballDirection.X *= -1;
