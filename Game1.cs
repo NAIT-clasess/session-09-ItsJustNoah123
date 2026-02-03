@@ -39,7 +39,7 @@ public class Game1 : Game
         // Initial Ball Position and Direction
         _ballPosition.X = 150;
         _ballPosition.Y = 195;
-        _ballSpeed = 200;
+        _ballSpeed = 400;
         _ballDirection.X = 1;
         _ballDirection.Y = -1;
 
@@ -66,7 +66,14 @@ public class Game1 : Game
         // TODO: Add your update logic here
             _ballPosition += _ballDirection * _ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
         
-
+        if (_ballPosition.X <= _playAreaBoundingBox.Left || _ballPosition.X >= _playAreaBoundingBox.Right)
+        {
+            _ballDirection.X *= -1;
+        }   
+        if (_ballPosition.Y <= _playAreaBoundingBox.Top || _ballPosition.Y >= _playAreaBoundingBox.Bottom)
+        {
+            _ballDirection.Y *= -1;
+        }
         base.Update(gameTime);
     }
 
