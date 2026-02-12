@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -29,6 +31,8 @@ public class Game1 : Game
     private const float _paddleWidth = 15f;
     private const float _paddleHeight = 100f;
 
+    private List<Student> _myStudents;
+
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this);
@@ -39,6 +43,11 @@ public class Game1 : Game
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
+        _myStudents = new List<Student>();
+
+        _myStudents.Add(new Student(0, "Noah", "Hemmelgarn"));
+        _myStudents[0].Update(111, "DDDD", "LLL");
+        Console.WriteLine(_myStudents[0].FirstName);
         // Screen Size
         _graphics.PreferredBackBufferWidth = _preferredScreenWidth;
         _graphics.PreferredBackBufferHeight = _preferredScreenHeight;
