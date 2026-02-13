@@ -18,20 +18,17 @@ public class Game1 : Game
     // Ball
     private const int _ballWidthAndHeight = 21;
     // Textures
-    private Texture2D _backgroundTexture, _ballTexture, _paddleTexture;
+    private Texture2D _backgroundTexture, _ballTexture;
     // Ball movement
     private float _ballSpeed = 200f;
-    private float _paddleSpeed = 300f;
-    private Vector2 _ballPosition, _ballDirection, _paddlePosition;
-    private Vector2 _paddleDirection;
+    private Vector2 _ballPosition, _ballDirection;
 
     private Rectangle _playAreaBoundingBox;
-    private Rectangle _ballRect, _paddleRect;
-
-    private const float _paddleWidth = 15f;
-    private const float _paddleHeight = 100f;
-
+    private Rectangle _ballRect;
     private List<Student> _myStudents;
+    private Paddle _leftPaddle;
+    private Paddle _rightPaddle;
+    private Vector2 _rightPaddleDirecton;
 
     public Game1()
     {
@@ -43,11 +40,6 @@ public class Game1 : Game
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
-        _myStudents = new List<Student>();
-
-        _myStudents.Add(new Student(0, "Noah", "Hemmelgarn"));
-        _myStudents[0].Update(111, "DDDD", "LLL");
-        Console.WriteLine(_myStudents[0].FirstName);
         // Screen Size
         _graphics.PreferredBackBufferWidth = _preferredScreenWidth;
         _graphics.PreferredBackBufferHeight = _preferredScreenHeight;
@@ -56,14 +48,15 @@ public class Game1 : Game
         _ballPosition.Y = 195;
         _ballDirection.X = 1;
         _ballDirection.Y = -1;
-        //paddle position
-        _paddlePosition.X = 50;
-        _paddlePosition.Y = 175;
-        _paddleDirection = Vector2.Zero;
+        _playAreaBoundingBox = new(0, 0, _preferredScreenWidth, _preferredScreenHeight);
+        _leftPaddle = new Paddle();
+        _leftPaddle.Initialize(new Vector2(100, 500), _playAreaBoundingBox, Color.White);
+        _rightPaddle = new Paddle();
+        _rightPaddle.Initialize(new Vector2(600, 500), _playAreaBoundingBox, Color.White);
         // Create Rectangles for Ball and Paddle
         _ballRect = new Rectangle((int)_ballPosition.X, (int)_ballPosition.Y, _ballWidthAndHeight, _ballWidthAndHeight);
-        _paddleRect = new Rectangle((int)_paddlePosition.X, (int)_paddlePosition.Y, (int)_paddleWidth, (int)_paddleHeight);
-        _playAreaBoundingBox = new(0, 0, _preferredScreenWidth, _preferredScreenHeight);
+        
+        
         // Apply Graphics changes
         _graphics.ApplyChanges();
         base.Initialize();
@@ -74,7 +67,8 @@ public class Game1 : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         _backgroundTexture = Content.Load<Texture2D>("Court");
         _ballTexture = Content.Load<Texture2D>("Ball");
-        _paddleTexture = Content.Load<Texture2D>("Paddle");
+        _leftPaddle.LoadContent(Content);
+        _rightPaddle.LoadContent(Content);
         // TODO: use this.Content to load your game content here
     }
 
@@ -86,29 +80,38 @@ public class Game1 : Game
         // TODO: Add your update logic here
         float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
         KeyboardState kbstate = Keyboard.GetState();
+        _rightPaddleDirecton = Vector2.Zero;
+        if (kbstate.IsKeyDown(Keys.Up))
+        {
+            _rightPaddleDirecton = new Vector2(0, -1);
+        }
+        else if (kbstate.IsKeyDown(Keys.Down))
+        {
+            _rightPaddleDirecton = new Vector2(0, 1);
+        
+        }
+        _rightPaddle.Update(gameTime, _rightPaddleDirecton);
+        Vector2 _leftPaddleDirection = Vector2.Zero;
         // Move Paddle
         if (kbstate.IsKeyDown(Keys.W))
         {
-            _paddleDirection = new Vector2(0, -1);
+            _leftPaddleDirection = new Vector2(0, -1);
 
         }
         else if (kbstate.IsKeyDown(Keys.S))
         {
-            _paddleDirection = new Vector2(0, 1);
+            _leftPaddleDirection = new Vector2(0, 1);
 
         }
         else
         {
-            _paddleDirection = Vector2.Zero;
+            _leftPaddleDirection = Vector2.Zero;
         }
         // Move Paddle
-        _paddlePosition += _paddleDirection * _paddleSpeed * dt;
-        //Clamp Paddle to play area using the play are bounding box and edge line width to prevent the paddle from going under the edge lines
-        _paddlePosition.Y = MathHelper.Clamp(_paddlePosition.Y, _playAreaBoundingBox.Top + _playAreaEdgeLineWidth, _playAreaBoundingBox.Bottom - _playAreaEdgeLineWidth - _paddleHeight);
+        _leftPaddle.Update(gameTime, _leftPaddleDirection);
         // Move Ball
         _ballPosition += _ballDirection * _ballSpeed * dt;
         _ballRect = new Rectangle((int)_ballPosition.X, (int)_ballPosition.Y, _ballWidthAndHeight, _ballWidthAndHeight);
-        _paddleRect = new Rectangle((int)_paddlePosition.X, (int)_paddlePosition.Y, (int)_paddleWidth, (int)_paddleHeight);
         // Bounce Ball off walls by inverting direction
         if (_ballRect.Left <= _playAreaBoundingBox.Left || _ballRect.Right >= _playAreaBoundingBox.Right)
         {
@@ -129,7 +132,8 @@ public class Game1 : Game
         _spriteBatch.Begin();
         _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, _preferredScreenWidth, _preferredScreenHeight), Color.White);
         _spriteBatch.Draw(_ballTexture, _ballRect, Color.White);
-        _spriteBatch.Draw(_paddleTexture, _paddleRect, Color.White);
+        _rightPaddle.Draw(_spriteBatch);
+        _leftPaddle.Draw(_spriteBatch);
         _spriteBatch.End();
         base.Draw(gameTime);
     }
