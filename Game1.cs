@@ -16,16 +16,11 @@ public class Game1 : Game
     // Play Area
     private const int _playAreaEdgeLineWidth = 12;
     // Ball
-    private const int _ballWidthAndHeight = 21;
+    private Ball _ball;
     // Textures
     private Texture2D _backgroundTexture, _ballTexture;
-    // Ball movement
-    private float _ballSpeed = 200f;
-    private Vector2 _ballPosition, _ballDirection;
-
     private Rectangle _playAreaBoundingBox;
     private Rectangle _ballRect;
-    private List<Student> _myStudents;
     private Paddle _leftPaddle;
     private Paddle _rightPaddle;
     private Vector2 _rightPaddleDirecton;
@@ -110,7 +105,7 @@ public class Game1 : Game
         // Move Paddle
         _leftPaddle.Update(gameTime, _leftPaddleDirection);
         // Move Ball
-        _ballPosition += _ballDirection * _ballSpeed * dt;
+        Ball
         _ballRect = new Rectangle((int)_ballPosition.X, (int)_ballPosition.Y, _ballWidthAndHeight, _ballWidthAndHeight);
         // Bounce Ball off walls by inverting direction
         if (_ballRect.Left <= _playAreaBoundingBox.Left || _ballRect.Right >= _playAreaBoundingBox.Right)
